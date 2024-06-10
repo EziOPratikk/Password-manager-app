@@ -6,12 +6,10 @@ The Password Manager App is a web application that allows users to securely stor
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
 - [Setup Instructions](#setup-instructions)
   - [Backend](#backend)
   - [Frontend](#frontend)
 - [Usage](#usage)
-- [Environment Variables](#environment-variables)
 
 ## Features
 
@@ -26,27 +24,6 @@ The Password Manager App is a web application that allows users to securely stor
 - **Backend:** Node.js, Express, MongoDB
 - **Authentication:** JWT (JSON Web Tokens)
 - **Encryption:** `mongoose-encryption`, `bcryptjs`
-
-## Project Structure
-
-│
-├── backend/
-│ ├── src/
-│ ├── .env
-│ ├── package.json
-│ └── ...
-│
-├── frontend/
-│ ├── public/
-│ ├── src/
-│ ├── .env
-│ ├── package.json
-│ └── ...
-│
-├── .gitignore
-├── README.md
-└── ...
-
 
 ## Setup Instructions
 
