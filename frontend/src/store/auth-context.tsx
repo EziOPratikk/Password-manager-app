@@ -64,7 +64,6 @@ export default function AuthContextProvider(props: AuthContextProviderProps) {
     },
     logout: () => {
       dispatch({ type: 'LOGOUT_USER' });
-
       localStorage.removeItem('email');
       localStorage.removeItem('token');
     },
