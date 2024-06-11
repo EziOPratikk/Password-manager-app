@@ -31,9 +31,14 @@ export default function Register() {
 
     postRequest(`${BASE_URL}/register/`, userCredentials)
       .then((response) => {
-        if (response.message === 'user with this email already exists') {
+        if (response.message === 'invalid email address')
+          showSnackbar('Invalid email address', 'error');
+
+        if (response.message === 'password should be at least 8 characters')
+          showSnackbar('Password should be at least 8 characters', 'error');
+
+        if (response.message === 'user with this email already exists')
           showSnackbar('Email is already taken!', 'error');
-        }
 
         if (response.message === 'user registered successfully') {
           showSnackbar('User registered successfully', 'success');
@@ -42,9 +47,8 @@ export default function Register() {
           }, 2000);
         }
 
-        if (response.message === 'user registration failed') {
+        if (response.message === 'user registration failed')
           showSnackbar('Failed to register!', 'error');
-        }
       })
       .catch(() => showSnackbar('Unexpected error occurred!', 'error'))
       .finally(() => {
