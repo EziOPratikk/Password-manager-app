@@ -23,8 +23,21 @@ const saltingRounds = 10;
 
 // * -------- Register API --------
 app.post('/register', async (req, res) => {
-  const userEmail = req.body.email;
-  const userPassword = req.body.password;
+  const userEmail = req.body.email.toLowerCase().trim();
+  const userPassword = req.body.password.trim();
+
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  if (!userEmail.match(emailRegex)) {
+    return res.send(JSON.stringify({ message: 'invalid email address' }));
+  }
+
+  if (userPassword.length < 8) {
+    return res.send(
+      JSON.stringify({ message: 'password should be at least 8 characters' })
+    );
+  }
 
   const existingUser = await User.findOne({ email: userEmail });
 
@@ -53,7 +66,7 @@ app.post('/register', async (req, res) => {
           )
         )
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           res.send(JSON.stringify({ message: 'user registration failed' }));
         });
     });
@@ -62,7 +75,7 @@ app.post('/register', async (req, res) => {
 
 // * -------- Login API --------
 app.post('/login', async (req, res) => {
-  const userEmail = req.body.email;
+  const userEmail = req.body.email.toLowerCase().trim();
   const userPassword = req.body.password;
 
   const existingUser = await User.findOne({ email: userEmail });
@@ -116,7 +129,8 @@ app
         (platform) => platform.name === platformName
       );
 
-      if (!foundPlatform) return res.json({ message: 'no credentials saved yet' });
+      if (!foundPlatform)
+        return res.json({ message: 'no credentials saved yet' });
 
       res.send(foundPlatform);
     } else {
@@ -126,8 +140,8 @@ app
   .post(authenticateToken, async (req, res) => {
     const userEmail = req.query.userEmail;
     const platformName = req.params.platformName.toLowerCase().trim();
-    const platformEmail = req.body.email;
-    const platformPassword = req.body.password;
+    const platformEmail = req.body.email.toLowerCase().trim();
+    const platformPassword = req.body.password.trim();
 
     const foundUser = await User.findOne({ email: userEmail });
 
@@ -173,24 +187,24 @@ app
   .patch(authenticateToken, async (req, res) => {
     const userEmail = req.query.userEmail;
     const platformName = req.params.platformName.toLowerCase().trim();
-    const platformEmail = req.body.email;
-    const platformPassword = req.body.password;
+    const platformEmail = req.body.email.toLowerCase().trim();
+    const platformPassword = req.body.password.trim();
 
     const foundUser = await User.findOne({ email: userEmail });
 
     if (!foundUser)
       return res.send(JSON.stringify({ message: 'user not found!' }));
 
-    // * Prepare the fields to be updated
-    const updateFields = {};
-    if (platformEmail) updateFields['platforms.$.email'] = platformEmail;
-    if (platformPassword)
-      updateFields['platforms.$.password'] = platformPassword;
+    const existingPlatform = foundUser.platforms.find(
+      (platform) => platform.name === platformName
+    );
 
-    await User.updateOne(
-      { email: userEmail, 'platforms.name': platformName },
-      { $set: updateFields }
-    )
+    if (platformEmail) existingPlatform.email = platformEmail;
+
+    if (platformPassword) existingPlatform.password = platformPassword;
+
+    await foundUser
+      .save()
       .then(() =>
         res.send(
           JSON.stringify({
@@ -201,6 +215,23 @@ app
       .catch((_) =>
         res.send(JSON.stringify({ message: 'failed to update credentials' }))
       );
+
+    // ! Update query does'not work in mongoose-encryption
+    // // * Prepare the fields to be updated
+    // const updateFields = {};
+    // if (platformEmail) {
+    //   console.log(platformEmail);
+    //   updateFields['platforms.$.email'] = platformEmail;
+    // }
+    // if (platformPassword) {
+    //   console.log(platformPassword);
+    //   updateFields['platforms.$.password'] = platformPassword;
+    // }
+
+    // await User.updateOne(
+    //   { email: userEmail, 'platforms.name': platformName },
+    //   { $set: updateFields }
+    // )
   });
 
 app.listen('3000', () => {
