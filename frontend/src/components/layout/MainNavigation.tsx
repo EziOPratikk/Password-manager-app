@@ -1,9 +1,14 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import IconButton from '@mui/material/IconButton';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+
 import pwdManagerIcon from '../../assets/images/password-manager.png';
 import NotificationSnackbar from '../UI/NotificationSnackbar.tsx';
 import { useSnackbar } from '../../utils/hooks.ts';
-import { useAuthContext } from '../../store/auth-context';
+import { useAuthContext } from '../../store/auth-context.tsx';
+import { useThemeContext } from '../../store/theme-context.tsx';
 
 export default function MainNavigation() {
   const location = useLocation();
@@ -12,6 +17,8 @@ export default function MainNavigation() {
   const navigate = useNavigate();
 
   const { logout, isAuthenticated } = useAuthContext();
+
+  const { mode, toggleTheme } = useThemeContext();
 
   const {
     showSnackbar,
@@ -32,7 +39,11 @@ export default function MainNavigation() {
   }
 
   return (
-    <header className='bg-white shadow-md flex py-4 pl-12 justify-around items-center flex-wrap'>
+    <header
+      className={`shadow-md flex py-4 pl-12 justify-around items-center flex-wrap ${
+        mode === 'dark' && 'bg-gray-800 text-white shadow-sm shadow-white'
+      }`}
+    >
       <div className='flex items-center gap-4'>
         <Link to='/'>
           <img
@@ -48,14 +59,16 @@ export default function MainNavigation() {
       </div>
       <div>
         <ul className='flex gap-12 items-center'>
-          <li
-            className={`hover:font-bold cursor-pointer ${
-              routeName === '/' && 'font-extrabold text-[1.1rem]'
-            }`}
-          >
-            <Link to='/'>Home</Link>
-          </li>
-          {!isAuthenticated && (
+          {isAuthenticated && (
+            <li
+              className={`hover:font-bold cursor-pointer ${
+                routeName === '/' && 'font-extrabold text-[1.1rem]'
+              }`}
+            >
+              <Link to='/'>Home</Link>
+            </li>
+          )}
+          {!isAuthenticated ? (
             <li
               className={`hover:font-bold cursor-pointer ${
                 routeName === '/login' && 'font-extrabold text-[1.1rem]'
@@ -63,8 +76,7 @@ export default function MainNavigation() {
             >
               <Link to='/login'>Login</Link>
             </li>
-          )}
-          {isAuthenticated && (
+          ) : (
             <li
               className='hover:font-bold cursor-pointer'
               onClick={handleLogout}
@@ -72,6 +84,13 @@ export default function MainNavigation() {
               Logout
             </li>
           )}
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={() => toggleTheme()}
+            color='inherit'
+          >
+            {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+          </IconButton>
         </ul>
       </div>
       <NotificationSnackbar

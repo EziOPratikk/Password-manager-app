@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-
 import Card from '@mui/material/Card';
+import { useThemeContext } from '../store/theme-context.tsx';
 
 type PlatformItemProps = {
   id: string;
@@ -10,6 +10,7 @@ type PlatformItemProps = {
 
 export default function PlatformItem(props: PlatformItemProps) {
   const navigate = useNavigate();
+  const { mode } = useThemeContext();
 
   function handlePlatformNavigation() {
     navigate(`/${props.id}`);
@@ -18,10 +19,17 @@ export default function PlatformItem(props: PlatformItemProps) {
   return (
     <Card
       variant='outlined'
-      className='hover:shadow-md transition-shadow duration-300 ease-in-out'
+      className={`hover:shadow-md transition-shadow duration-300 ease-in-out ${
+        mode === 'dark' &&
+        'shadow-white shadow-sm hover:shadow-white hover:shadow-md'
+      }`}
       onClick={handlePlatformNavigation}
     >
-      <li className='list-none py-8 px-14 text-center cursor-pointer'>
+      <li
+        className={`list-none py-8 px-14 text-center cursor-pointer ${
+          mode === 'dark' && 'bg-gray-800 text-white'
+        }`}
+      >
         <div className='w-20 mb-4 mx-auto'>
           <img
             src={props.src}
