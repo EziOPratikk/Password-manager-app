@@ -18,6 +18,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import PasswordStrengthBar from 'react-password-strength-bar';
+
 type AuthenticationProps = {
   type: 'authentication';
   buttonLabel: string;
@@ -156,6 +158,10 @@ export default function TextFormField(
           label='Password'
         />
       </FormControl>
+      {userInput.password &&
+        (props.buttonLabel === 'Register' || props.type === 'platform') && (
+          <PasswordStrengthBar password={userInput.password} />
+        )}
       <Box
         sx={{
           m: 1,
