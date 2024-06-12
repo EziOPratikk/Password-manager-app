@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAuthContext } from '../store/auth-context';
+import { useAuthContext } from '../store/auth-context.tsx';
 
 type PrivateRouteProps = {
   children: ReactNode;
