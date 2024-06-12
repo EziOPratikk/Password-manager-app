@@ -10,6 +10,7 @@ The Password Manager App is a web application that allows users to securely stor
   - [Backend](#backend)
   - [Frontend](#frontend)
 - [Usage](#usage)
+- [Screenshots](#screenshots)
 
 ## Features
 
@@ -79,3 +80,7 @@ Navigate to /login and log in with your credentials.
 
 3. ***Manage Passwords:***
 After logging in, you can add, update, and view passwords for different platforms.
+
+### Screenshots
+
+TBA
