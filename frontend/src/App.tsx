@@ -32,7 +32,11 @@ function App() {
                 <Route
                   key={platform.id}
                   path={`/${platform.id}`}
-                  element={<Platform />}
+                  element={
+                    <PrivateRoute>
+                      <Platform />
+                    </PrivateRoute>
+                  }
                 ></Route>
               );
             })}
