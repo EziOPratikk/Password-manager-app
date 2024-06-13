@@ -61,7 +61,7 @@ export default function Login() {
   }
 
   return (
-    <section className='h-96 flex flex-col justify-center items-center'>
+    <section className='xl:h-96 flex flex-col justify-center items-center'>
       <h1 className='text-center text-xl font-bold mb-4'>Login</h1>
       <TextFormField
         type='authentication'
