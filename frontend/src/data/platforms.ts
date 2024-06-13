@@ -4,6 +4,9 @@ import ytImage from '../assets/images/youtube.png';
 import gitHubImage from '../assets/images/github.png';
 import twitterImage from '../assets/images/twitter.png';
 import tiktokImage from '../assets/images/tik-tok.png';
+import linkedinImage from '../assets/images/linkedin.png';
+import instagramImage from '../assets/images/instagram.png';
+import snapchatImage from '../assets/images/snapchat.png';
 
 export const PLATFORMS = [
   {
@@ -35,5 +38,20 @@ export const PLATFORMS = [
     id: 'tiktok',
     name: 'TikTok',
     src: tiktokImage,
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn',
+    src: linkedinImage,
+  },
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    src: instagramImage,
+  },
+  {
+    id: 'snapchat',
+    name: 'Snapchat',
+    src: snapchatImage,
   },
 ];
