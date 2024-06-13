@@ -11,7 +11,7 @@ export default function Layout(props: LayoutProps) {
   return (
     <Fragment>
       <MainNavigation />
-      <main className='my-8 mx-auto max-w-[50rem] w-[90%]'>
+      <main className='my-48 sm:my-44 md:my-40 mx-auto max-w-[50rem] w-[90%]'>
         {props.children}
       </main>
     </Fragment>

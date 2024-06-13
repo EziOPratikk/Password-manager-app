@@ -40,8 +40,8 @@ export default function MainNavigation() {
 
   return (
     <header
-      className={`shadow-md flex py-4 pl-12 justify-around items-center flex-wrap ${
-        mode === 'dark' && 'bg-gray-800 text-white shadow-sm shadow-white'
+      className={`fixed top-0 w-[100%] shadow-md flex py-4 pl-12 justify-around items-center flex-wrap ${
+        mode === 'dark' ? 'bg-gray-800 text-white shadow-sm shadow-white' : 'bg-white'
       }`}
     >
       <div className='flex items-center gap-4'>
