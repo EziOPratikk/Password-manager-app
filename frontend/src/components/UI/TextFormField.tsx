@@ -7,7 +7,6 @@ import {
   useEffect,
 } from 'react';
 
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -15,10 +14,12 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import PasswordStrengthBar from 'react-password-strength-bar';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 type AuthenticationProps = {
   type: 'authentication';
@@ -116,18 +117,35 @@ export default function TextFormField(
       autoComplete='off'
       className='flex flex-col items-center justify-center'
     >
-      <TextField
-        error={isEmpty}
-        id='outlined-basic'
-        label='Email'
-        variant='outlined'
-        type='email'
-        name='email'
-        value={userInput?.email}
-        onChange={handleUserInputChange}
-        fullWidth
-        required
-      />
+      <FormControl sx={{ m: 1, width: '25ch' }} variant='outlined'>
+        <InputLabel htmlFor='outlined-adornment-email' error={isEmpty} required>
+          Email
+        </InputLabel>
+        <OutlinedInput
+          error={isEmpty}
+          id='outlined-adornment-email'
+          name='email'
+          value={userInput?.email}
+          onChange={handleUserInputChange}
+          fullWidth
+          endAdornment={
+            <InputAdornment position='end'>
+              {props.type === 'platform' && (
+                <CopyToClipboard text={userInput.email}>
+                  <IconButton
+                    style={{ marginLeft: '0.5rem' }}
+                    aria-label='copy text to clipboard'
+                    edge='end'
+                  >
+                    <ContentCopyIcon fontSize='small' />
+                  </IconButton>
+                </CopyToClipboard>
+              )}
+            </InputAdornment>
+          }
+          label='Email'
+        />
+      </FormControl>
       <FormControl sx={{ m: 1, width: '25ch' }} variant='outlined'>
         <InputLabel
           htmlFor='outlined-adornment-password'
@@ -153,6 +171,17 @@ export default function TextFormField(
               >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
+              {props.type === 'platform' && (
+                <CopyToClipboard text={userInput.password}>
+                  <IconButton
+                    style={{ marginLeft: '0.5rem' }}
+                    aria-label='copy text to clipboard'
+                    edge='end'
+                  >
+                    <ContentCopyIcon fontSize='small' />
+                  </IconButton>
+                </CopyToClipboard>
+              )}
             </InputAdornment>
           }
           label='Password'
