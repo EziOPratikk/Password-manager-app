@@ -64,6 +64,8 @@ export default function Platform() {
   const token = JSON.parse(localStorage.getItem('token')!);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getRequestWithToken(
       `${BASE_URL}/platform/${routeName}?userEmail=${userEmail}`,
       token
@@ -102,7 +104,10 @@ export default function Platform() {
           'error'
         )
       )
-      .finally(() => closeSnackbar());
+      .finally(() => {
+        setIsLoading(false);
+        closeSnackbar();
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -214,6 +219,16 @@ export default function Platform() {
       <h1 className='text-center text-xl font-bold mb-8'>
         Your password for {routeName.toUpperCase()}
       </h1>
+      <p className='mb-2'>
+        Site:&nbsp;
+        <a
+          href={`https://www.${routeName}.com/`}
+          target='_blank'
+          className='underline'
+        >
+          {`${routeName}.com`}
+        </a>
+      </p>
       <TextFormField
         type='platform'
         onSave={saveCredentials}
