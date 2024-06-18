@@ -75,6 +75,11 @@ export default function Login() {
           Don't have an account?
         </Button>
       </Link>
+      <Link to='/forgot-password'>
+        <Button variant='text' size='small'>
+          Forgot Password?
+        </Button>
+      </Link>
       <NotificationSnackbar
         isOpen={isSnackbarOpen}
         message={snackbarMessage}
