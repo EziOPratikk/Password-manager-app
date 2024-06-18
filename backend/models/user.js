@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   platforms: [PlatformSchema],
+  resetPasswordCode: String,
+  resetCodeExpireTime: Date,
 });
 
 const User = mongoose.model('User', userSchema);
