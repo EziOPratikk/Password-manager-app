@@ -5,10 +5,13 @@ import Register from './pages/Register.tsx';
 import Login from './pages/Login.tsx';
 import Home from './pages/Home.tsx';
 import Platform from './pages/Platform.tsx';
+import ForgotPassword from './pages/ForgotPassword.tsx';
+import ResetPassword from './pages/ResetPassword.tsx';
 import NotFound from './pages/NotFound.tsx';
 import AuthContextProvider from './store/auth-context.tsx';
 import ThemeContextProvider from './store/theme-context.tsx';
-import PrivateRoute from './components/PrivateRoute.tsx';
+import AuthPrivateRoute from './components/auth/AuthPrivateRoute.tsx';
+import PwdResetRoute from './components/PwdResetRoute.tsx';
 import { PLATFORMS } from './data/platforms.ts';
 
 function App() {
@@ -22,9 +25,9 @@ function App() {
             <Route
               path='/'
               element={
-                <PrivateRoute>
+                <AuthPrivateRoute>
                   <Home />
-                </PrivateRoute>
+                </AuthPrivateRoute>
               }
             ></Route>
             {PLATFORMS.map((platform) => {
@@ -33,13 +36,22 @@ function App() {
                   key={platform.id}
                   path={`/${platform.id}`}
                   element={
-                    <PrivateRoute>
+                    <AuthPrivateRoute>
                       <Platform />
-                    </PrivateRoute>
+                    </AuthPrivateRoute>
                   }
                 ></Route>
               );
             })}
+            <Route path='/forgot-password' element={<ForgotPassword />}></Route>
+            <Route
+              path='/reset-password'
+              element={
+                <PwdResetRoute>
+                  <ResetPassword />
+                </PwdResetRoute>
+              }
+            ></Route>
             <Route path='*' element={<NotFound />}></Route>
           </Routes>
         </Layout>
