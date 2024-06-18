@@ -8,6 +8,7 @@ require('dotenv').config();
 const User = require('./models/user.js');
 const platformModule = require('./models/platform.js');
 const authenticateToken = require('./middleware/authMiddleware.js');
+const sendEmail = require('./controller/send-email.js');
 require('./db/conn.js');
 
 const app = express();
@@ -114,6 +115,100 @@ app.post('/login', async (req, res) => {
     return res.send(JSON.stringify({ message: 'invalid email or password' }));
   }
 });
+
+// * Generate random 6 digit code
+function generateResetCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// * -------- Forget Password API --------
+app.post('/forgot-password', async (req, res) => {
+  const userEmail = req.body.email.toLowerCase().trim();
+
+  const existingUser = await User.findOne({ email: userEmail });
+
+  if (!existingUser) {
+    return res.send(JSON.stringify({ message: 'email is not registered' }));
+  }
+
+  const resetCode = generateResetCode();
+
+  const info = await sendEmail({
+    from: process.env.GMAIL_USER,
+    to: userEmail,
+    subject: 'Reset Password',
+    text: `Your password reset code is ${resetCode}. This code will expire in 1 hour.`,
+  });
+
+  if (info.accepted) {
+    existingUser.resetPasswordCode = resetCode;
+    existingUser.resetCodeExpireTime = Date.now() + 3600000;
+
+    await existingUser.save();
+
+    return res.send(
+      JSON.stringify({
+        message: 'email sent successfully to recipient',
+        expireTime: existingUser.resetCodeExpireTime,
+      })
+    );
+  } else {
+    return res.send(
+      JSON.stringify({
+        message: 'unexpected error occurred while sending an email',
+      })
+    );
+  }
+});
+
+// * -------- Reset Password API --------
+app
+  .route('/reset-password')
+  .post(async (req, res) => {
+    const userEmail = req.body.email;
+    const resetCode = req.body.resetCode;
+
+    const validUser = await User.findOne({
+      email: userEmail,
+      resetPasswordCode: resetCode,
+      resetCodeExpireTime: { $gt: Date.now() }, // $gt means greater than
+    });
+
+    if (validUser) {
+      return res.send(JSON.stringify({ message: 'valid reset code' }));
+    } else {
+      return res.send(
+        JSON.stringify({ message: 'invalid or expired reset code' })
+      );
+    }
+  })
+  .patch(async (req, res) => {
+    const userEmail = req.body.email.toLowerCase().trim();
+    const userNewPassword = req.body.newPassword;
+
+    const existingUser = await User.findOne({ email: userEmail });
+
+    bcrypt.genSalt(saltingRounds, (_, salt) => {
+      bcrypt.hash(userNewPassword, salt, async (_, hashedPassword) => {
+        existingUser.password = hashedPassword;
+        existingUser.resetPasswordCode = undefined;
+        existingUser.resetCodeExpireTime = undefined;
+
+        await existingUser
+          .save()
+          .then(() =>
+            res.send(
+              JSON.stringify({
+                message: 'password reset successfully',
+              })
+            )
+          )
+          .catch((_) => {
+            res.send(JSON.stringify({ message: 'password reset failed' }));
+          });
+      });
+    });
+  });
 
 // * -------- Platform API's --------
 app
