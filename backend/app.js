@@ -210,7 +210,29 @@ app
     });
   });
 
-// * -------- Platform API's --------
+// * -------- All Saved Platform Names for Specific User API --------
+app.get('/platforms/:userEmail', authenticateToken, async (req, res) => {
+  const userEmail = req.params.userEmail;
+
+  const existingUser = await User.findOne({ email: userEmail });
+
+  if (!existingUser) {
+    return res.send(JSON.stringify({ message: 'user not found' }));
+  }
+
+  if (existingUser.platforms.length !== 0) {
+    const savedPlatformNames = [];
+
+    existingUser.platforms.forEach((platform) => {
+      savedPlatformNames.push(platform.name);
+    });
+    return res.send(JSON.stringify({ platformNames: savedPlatformNames }));
+  } else {
+    return res.send(JSON.stringify({ message: 'no platforms saved yet' }));
+  }
+});
+
+// * -------- Specific Platform API's --------
 app
   .route('/platform/:platformName')
   .get(authenticateToken, async (req, res) => {
