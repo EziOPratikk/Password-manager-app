@@ -8,6 +8,7 @@ import Platform from './pages/Platform.tsx';
 import ForgotPassword from './pages/ForgotPassword.tsx';
 import ResetPassword from './pages/ResetPassword.tsx';
 import NotFound from './pages/NotFound.tsx';
+import Profile from './pages/Profile.tsx';
 import AuthContextProvider from './store/auth-context.tsx';
 import ThemeContextProvider from './store/theme-context.tsx';
 import AuthPrivateRoute from './components/auth/AuthPrivateRoute.tsx';
@@ -43,6 +44,14 @@ function App() {
                 ></Route>
               );
             })}
+            <Route
+              path='/profile/:userEmail'
+              element={
+                <AuthPrivateRoute>
+                  <Profile />
+                </AuthPrivateRoute>
+              }
+            ></Route>
             <Route path='/forgot-password' element={<ForgotPassword />}></Route>
             <Route
               path='/reset-password'
