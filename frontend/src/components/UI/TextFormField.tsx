@@ -127,6 +127,7 @@ export default function TextFormField(
           name='email'
           value={userInput?.email}
           onChange={handleUserInputChange}
+          disabled={props.loading}
           fullWidth
           endAdornment={
             <InputAdornment position='end'>
@@ -161,6 +162,7 @@ export default function TextFormField(
           name='password'
           value={userInput?.password}
           onChange={handleUserInputChange}
+          disabled={props.loading}
           fullWidth
           endAdornment={
             <InputAdornment position='end'>
