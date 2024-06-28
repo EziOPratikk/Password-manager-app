@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 type InputFieldProps = {
   title: 'Forgot Password' | 'Reset Password' | 'New Password';
   label: string;
-  inputType: 'email' | 'number' | 'password';
+  inputType: 'email' | 'password' | 'text';
   buttonLabel: string;
   onSubmit: (inputValue: string) => void;
   loading: boolean;
@@ -22,6 +22,11 @@ export default function InputField(props: InputFieldProps) {
     const newValue = event.currentTarget.value;
 
     setUserInput(newValue);
+
+    // * Automatically submit after typing 6 digit code
+    if (props.title === 'Reset Password' && newValue.length === 6) {
+      props.onSubmit(userInput);
+    }
   }
 
   function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
@@ -57,6 +62,8 @@ export default function InputField(props: InputFieldProps) {
         error={isEmpty}
         helperText={isEmpty && `${props.label} is required*`}
         variant='outlined'
+        inputProps={props.title === 'Reset Password' ? { maxLength: 6 } : {}}
+        disabled={props.loading}
         required
       />
       <Button variant='contained' type='submit' disabled={props.loading}>
