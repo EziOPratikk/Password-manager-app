@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+
 import Card from '@mui/material/Card';
+
 import { useThemeContext } from '../store/theme-context.tsx';
 
 type PlatformItemProps = {
@@ -20,8 +22,7 @@ export default function PlatformItem(props: PlatformItemProps) {
     <Card
       variant='outlined'
       className={`hover:shadow-md transition-shadow duration-300 ease-in-out ${
-        mode === 'dark' &&
-        'shadow-white shadow-sm hover:shadow-white hover:shadow-md'
+        mode === 'dark' && 'shadow-sm hover:shadow-white hover:shadow-sm'
       }`}
       onClick={handlePlatformNavigation}
     >
