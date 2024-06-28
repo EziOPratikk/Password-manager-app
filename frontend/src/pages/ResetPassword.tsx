@@ -164,7 +164,7 @@ export default function ResetPassword() {
         </h2>
       </div>
       <InputField
-        inputType='number'
+        inputType='text'
         title='Reset Password'
         label='6-Digit Code'
         buttonLabel='Send'

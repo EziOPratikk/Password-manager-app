@@ -50,7 +50,7 @@ export default function Login() {
           showSnackbar('Logged in successfully', 'success');
           setTimeout(() => {
             navigate('/', { replace: true });
-          }, 2000);
+          }, 1000);
         }
       })
       .catch(() => showSnackbar('Unexpected error occurred!', 'error'))
